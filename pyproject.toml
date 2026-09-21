@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=77.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "image-exif-extractor"
+version = "0.0.1"
+authors = [
+  { name = "Ryuto Yoshida" },
+]
+description = "Typed extraction of Exif metadata from image files."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "geo-coordinate @ git+https://github.com/ry-yoshida-dev/GeoCoordinate.git@c8fa645a1dbdf8fc7629debb11c4164757c17ec3",
+    "numpy",
+    "pillow>=11.0",
+    "units @ git+https://github.com/ry-yoshida-dev/Units.git@870b21930ab5c1a36ddbf0457a68700f846c0dd5",
+]
+
+[project.urls]
+Homepage = "https://github.com/ry-yoshida-dev/ImageExifExtractor"
+"Bug Tracker" = "https://github.com/ry-yoshida-dev/ImageExifExtractor/issues"
+
+[project.optional-dependencies]
+heif = [
+    "pillow-heif>=0.18",
+]
+
+[dependency-groups]
+dev = [
+    "basedpyright",
+    "mypy",
+    "pillow-heif>=0.18",
+    "pytest",
+    "ruff",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+image_exif_extractor = ["py.typed"]
+
+[tool.mypy]
+strict = true
+files = ["src", "tests", "utils"]
+
+[tool.basedpyright]
+include = ["src", "tests", "utils"]
+typeCheckingMode = "strict"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
