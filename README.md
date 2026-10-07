@@ -5,6 +5,7 @@
 ImageExifExtractor (`image_exif_extractor`) is a Python package for extracting Exif metadata from image files.
 `ExifExtractor` reads the Exif block from the file header, without decoding pixels, into an immutable `ExifMetadata` of typed `ExifEntry` items.
 `ExifMetadata` also interprets the common fields: camera, capture settings, GPS location, direction and orientation.
+`ExifWriter` writes the location, direction and time of capture back into JPEG files without re-encoding them.
 The XMP metadata is kept as well, and `ExifMetadata.drone_attitude` reads the height and gimbal angles DJI drones record in it.
 
 For package-level details, see [src/image_exif_extractor/README.md](src/image_exif_extractor/README.md).
@@ -86,6 +87,25 @@ first = extractor.extract("first.jpg").gps_coordinate
 second = extractor.extract("second.jpg").gps_coordinate
 if first is not None and second is not None:
     print(first.distance_to(second).km)
+```
+
+## Editing Exif
+
+`ExifWriter` sets the fields of an `ExifUpdate` in a JPEG file, in place or into another file.
+Only the Exif segment is replaced, and in it only the directories that change, so the pixels,
+the thumbnail and the maker note are kept byte for byte. See
+[src/image_exif_extractor/writing/README.md](src/image_exif_extractor/writing/README.md).
+
+```python
+from geo_coordinate import Bearing, GeoCoordinate, NorthReference
+
+from image_exif_extractor import ExifUpdate, ExifWriter
+
+update = ExifUpdate(
+    location=GeoCoordinate.from_degrees(35.681236, 139.767125),
+    image_direction=Bearing.from_degrees(123.4, NorthReference.TRUE),
+)
+ExifWriter().write("photo.jpg", update, "photo_fixed.jpg")
 ```
 
 ## JSON Output
