@@ -18,10 +18,10 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "geo-coordinate @ git+https://github.com/ry-yoshida-dev/GeoCoordinate.git@c8fa645a1dbdf8fc7629debb11c4164757c17ec3",
+    "geo-coordinate @ git+https://github.com/ry-yoshida-dev/GeoCoordinate.git@0a668e79a18102ccfaa50fa983c286583fe7b9cc",
     "numpy",
     "pillow>=11.0",
-    "units @ git+https://github.com/ry-yoshida-dev/Units.git@870b21930ab5c1a36ddbf0457a68700f846c0dd5",
+    "units @ git+https://github.com/ry-yoshida-dev/Units.git@61372604eb6f2347258bbf52df7224f590cdfb48",
 ]
 
 [project.urls]
