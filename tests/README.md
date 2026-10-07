@@ -19,6 +19,8 @@ Pytest suite for `image_exif_extractor`. Fixtures in `conftest.py` write small i
 | [test_json_converter.py](./test_json_converter.py) | Conversion of normalized values into JSON values |
 | [test_heif_support.py](./test_heif_support.py) | Registration of the optional HEIF opener, and the error when the plugin is absent |
 | [test_export_exif_csv.py](./test_export_exif_csv.py) | CSV export of a directory by `utils/export_exif_csv.py` |
+| [test_gps_bearing.py](./test_gps_bearing.py) | Reading of GPS directions and their north reference into a `Bearing` |
+| [test_xmp.py](./test_xmp.py) | Property lookups of `XmpPacket` and the `DroneAttitude` read from DJI XMP |
 
 ## Example
 

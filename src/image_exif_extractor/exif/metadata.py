@@ -3,9 +3,10 @@ from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
 
-from geo_coordinate import GeoCoordinate
+from geo_coordinate import Bearing, GeoCoordinate
 
-from .gps import GpsCoordinateReader
+from ..xmp import DroneAttitude, DroneAttitudeReader, XmpPacket
+from .gps import GpsBearingKind, GpsBearingReader, GpsCoordinateReader
 from .summaries import CameraInfo, CaptureSettings, Orientation
 from .tags import ExifEntry, ExifIFD, ExifJsonConverter, ExifValue, JsonValue
 
@@ -20,7 +21,7 @@ class ExifMetadata:
 
     Raw tags are kept as `ExifEntry` items, and common fields are interpreted on
     first access, then cached, through `camera`, `capture_settings`,
-    `gps_coordinate` and `orientation`.
+    `gps_coordinate`, `image_direction` and `orientation`.
 
     Attributes
     ----------
@@ -28,10 +29,13 @@ class ExifMetadata:
         The image file the metadata was extracted from.
     entries : tuple[ExifEntry, ...]
         Every extracted tag, in directory order.
+    xmp : XmpPacket | None
+        The XMP metadata of the image, or None when it carries none.
     """
 
     path: Path
     entries: tuple[ExifEntry, ...]
+    xmp: XmpPacket | None = None
 
     @cached_property
     def _entry_index(self) -> dict[tuple[ExifIFD, int], ExifEntry]:
@@ -205,6 +209,57 @@ class ExifMetadata:
             A single coordinate, or None when the image carries no usable location.
         """
         return GpsCoordinateReader.from_metadata(self)
+
+    @cached_property
+    def image_direction(self) -> Bearing | None:
+        """
+        Direction the camera faced when the image was captured.
+
+        Returns
+        -------
+        Bearing | None
+            A single bearing from true or magnetic north, or None when unrecorded.
+        """
+        return GpsBearingReader.from_metadata(self, GpsBearingKind.IMAGE_DIRECTION)
+
+    @cached_property
+    def drone_attitude(self) -> DroneAttitude | None:
+        """
+        Attitude of a drone's camera, as DJI records it in XMP.
+
+        Returns
+        -------
+        DroneAttitude | None
+            The height above the take-off point and the gimbal angles, or None when
+            the image carries no XMP or no drone attitude.
+
+        Raises
+        ------
+        ValueError
+            If a drone property is present but not a finite number.
+        """
+        return None if self.xmp is None else DroneAttitudeReader.from_packet(self.xmp)
+
+    def gps_bearing(self, kind: GpsBearingKind) -> Bearing | None:
+        """
+        Read one of the directions the GPS directory records.
+
+        Parameters
+        ----------
+        kind : GpsBearingKind
+            The direction faced, moved in, or towards the destination.
+
+        Returns
+        -------
+        Bearing | None
+            A single bearing from true or magnetic north, or None when unrecorded.
+
+        Raises
+        ------
+        ValueError
+            If the reference is neither `T` nor `M`.
+        """
+        return GpsBearingReader.from_metadata(self, kind)
 
     @cached_property
     def orientation(self) -> Orientation | None:

@@ -7,6 +7,7 @@ from PIL import ExifTags, Image
 from .exif import ExifMetadata
 from .exif.tags import ExifEntry, ExifIFD, ExifValueNormalizer
 from .heif_support import HeifSupport
+from .xmp import XmpPacket
 
 
 class ExifExtractor:
@@ -84,8 +85,9 @@ class ExifExtractor:
         with Image.open(image_path) as image:
             exif = image.getexif()
             entries = tuple(entry for ifd in self.ifds for entry in self._read_entries(exif, ifd))
+            xmp = self._read_xmp(image)
 
-        return ExifMetadata(path=image_path, entries=entries)
+        return ExifMetadata(path=image_path, entries=entries, xmp=xmp)
 
     def extract_all(self, paths: Iterable[str | PathLike[str]]) -> Iterator[ExifMetadata]:
         """
@@ -110,6 +112,29 @@ class ExifExtractor:
         """
         for path in paths:
             yield self.extract(path)
+
+    @staticmethod
+    def _read_xmp(image: Image.Image) -> XmpPacket | None:
+        """
+        Read the XMP packet Pillow, or pillow-heif, kept from the file header.
+
+        Parameters
+        ----------
+        image : Image.Image
+            The open image.
+
+        Returns
+        -------
+        XmpPacket | None
+            The packet, or None when the image carries none.
+        """
+        match image.info.get("xmp"):
+            case bytes() as data if data:
+                return XmpPacket.from_bytes(data)
+            case str() as text if text:
+                return XmpPacket(text=text)
+            case _:
+                return None
 
     def _read_entries(self, exif: Image.Exif, ifd: ExifIFD) -> Iterator[ExifEntry]:
         """

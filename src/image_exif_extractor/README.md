@@ -11,6 +11,7 @@ Package for extracting the Exif tags of an image into immutable, typed entries, 
 | [extractor.py](./extractor.py) | `ExifExtractor`, the entry point reading the selected directories of image files into `ExifMetadata` |
 | [heif_support.py](./heif_support.py) | `HeifSupport`, registering the optional `pillow-heif` opener so HEIF / HEIC images can be read |
 | [exif/](./exif/README.md) | `ExifMetadata` returned by `ExifExtractor`, with its raw tags and interpreted fields |
+| [xmp/](./xmp/README.md) | `XmpPacket` of the XMP metadata, and the `DroneAttitude` of a drone's camera read from it |
 
 ## Values
 

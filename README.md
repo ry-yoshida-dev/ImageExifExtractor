@@ -4,7 +4,8 @@
 
 ImageExifExtractor (`image_exif_extractor`) is a Python package for extracting Exif metadata from image files.
 `ExifExtractor` reads the Exif block from the file header, without decoding pixels, into an immutable `ExifMetadata` of typed `ExifEntry` items.
-`ExifMetadata` also interprets the common fields: camera, capture settings, GPS location and orientation.
+`ExifMetadata` also interprets the common fields: camera, capture settings, GPS location, direction and orientation.
+The XMP metadata is kept as well, and `ExifMetadata.drone_attitude` reads the height and gimbal angles DJI drones record in it.
 
 For package-level details, see [src/image_exif_extractor/README.md](src/image_exif_extractor/README.md).
 
@@ -47,6 +48,10 @@ if coordinate is not None:
     print(coordinate.latitude.degree, coordinate.longitude.degree)
     if coordinate.altitude is not None:
         print(coordinate.altitude.meter)
+
+direction = metadata.image_direction
+if direction is not None:
+    print(direction.degree, direction.reference)  # [123.4] NorthReference.TRUE
 
 orientation = metadata.orientation
 if orientation is not None:
