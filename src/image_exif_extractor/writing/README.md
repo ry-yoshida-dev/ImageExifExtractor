@@ -2,28 +2,8 @@
 
 ## Overview
 
-Lossless writing of Exif fields into JPEG files. `ExifWriter` sets the location, the direction
-the camera faced and the time of capture of an `ExifUpdate`; fields left None are kept.
-
-Only the Exif segment (APP1) of the file is replaced. Everything from the first scan on, the
-compressed pixels and anything appended after them such as the second image of an MPO, and every
-other segment are kept byte for byte, so the image is never re-encoded. In the Exif block, the
-directories that change (GPS, Exif) are written anew at the end of the TIFF block, keeping their
-other entries, and IFD0 is written anew pointing to them. Every value stored elsewhere keeps its
-offset: the thumbnail directory (IFD1) and its image, the maker note, whose vendor formats hold
-offsets of their own, and the values of the other tags. The replaced directories are left unused,
-a few hundred bytes per edit. A JPEG without Exif gets a new block, and a missing GPS or Exif
-directory is created.
-
-| Field | Tags written | Also |
-| --- | --- | --- |
-| `location` | `GPSLatitude(Ref)`, `GPSLongitude(Ref)`, `GPSAltitude(Ref)` | `GPSVersionID` when absent; the altitude is removed when the location has none |
-| `image_direction` | `GPSImgDirection`, `GPSImgDirectionRef` (`T` / `M`) | |
-| `captured_at` | `DateTimeOriginal`, `OffsetTimeOriginal` when timezone-aware | `SubsecTimeOriginal` and a stale offset are removed |
-
-Latitudes and longitudes are written to a ten-thousandth of an arcsecond, about 3 mm, and
-directions and altitudes to a hundredth. XMP metadata, which some applications write besides
-Exif, is not changed. Other formats, such as HEIF, are read but not written.
+Lossless writing of Exif fields into JPEG files. `ExifWriter` sets the location, the direction the camera faced and the
+time of capture of an `ExifUpdate`, replacing only the Exif segment so the image is never re-encoded.
 
 ## Components
 

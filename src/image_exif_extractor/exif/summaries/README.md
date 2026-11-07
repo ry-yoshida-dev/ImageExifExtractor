@@ -12,10 +12,3 @@ Interpretations of common Exif fields, each built through `from_metadata` from a
 | [capture_settings.py](./capture_settings.py) | `CaptureSettings`, exposure time, f-number, ISO, focal length and capture time |
 | [datetime_parser.py](./datetime_parser.py) | `ExifDateTimeParser`, combining the date-time, offset and sub-second tags into a `datetime` |
 | [orientation.py](./orientation.py) | `Orientation` enum of the eight Exif orientations, with rotation and mirroring |
-
-## Capture Time
-
-`CaptureSettings.captured_at` reads `DateTimeOriginal`, and falls back to
-`DateTime` when it is absent. It is timezone-aware when the matching
-`OffsetTime*` tag is present, and naive when it is absent or blank. Blank or all-zero
-date-times, which Exif uses for unknown values, read as `None`.

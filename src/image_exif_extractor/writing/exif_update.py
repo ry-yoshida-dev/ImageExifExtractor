@@ -11,6 +11,9 @@ class ExifUpdate:
     """
     The fields to set in the Exif block of an image; fields left None are kept.
 
+    Latitudes and longitudes are written to a ten-thousandth of an arcsecond, about
+    3 mm, and directions and altitudes to a hundredth.
+
     Attributes
     ----------
     location : GeoCoordinate | None

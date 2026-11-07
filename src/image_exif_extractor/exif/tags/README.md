@@ -14,7 +14,7 @@ Representation of raw Exif tags: which directory a tag belongs to, its normalize
 | [normalizer.py](./normalizer.py) | `ExifValueNormalizer`, converting Pillow's raw values into `ExifValue` |
 | [json_converter.py](./json_converter.py) | `ExifJsonConverter`, converting `ExifValue` into standard JSON values |
 
-## Example
+## Examples
 
 ```python
 from image_exif_extractor.exif.tags import ExifEntry, ExifIFD, ExifJsonConverter

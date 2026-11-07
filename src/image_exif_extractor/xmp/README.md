@@ -2,26 +2,8 @@
 
 ## Overview
 
-XMP metadata of images, which vendors use for what Exif has no tag for. `ExifExtractor` keeps
-the XMP packet Pillow (or pillow-heif) reads from the file header as `ExifMetadata.xmp`, and
-`ExifMetadata.drone_attitude` reads from it how a drone held its camera.
-
-`XmpPacket` looks up simple properties by qualified name, whether written as an attribute of an
-`rdf:Description` (`drone-dji:GimbalYawDegree="-87.30"`) or as an element of their own. The
-packet is matched as text rather than parsed as XML, so a truncated or vendor-mangled packet
-still yields the properties it holds.
-
-`DroneAttitudeReader` reads the properties DJI defines, which other makers follow:
-
-| Property | `DroneAttitude` field | Read as |
-| --- | --- | --- |
-| `drone-dji:RelativeAltitude` | `relative_altitude` | Signed `Altitude` in meters above the take-off point |
-| `drone-dji:GimbalYawDegree` | `gimbal_yaw` | `Bearing` from true north, wrapped into [0, 360) |
-| `drone-dji:GimbalPitchDegree` | `gimbal_pitch` | `Angle`, -90 degrees straight down |
-| `drone-dji:GimbalRollDegree` | `gimbal_roll` | `Angle`, or None |
-| `drone-dji:FlightYawDegree` | `flight_yaw` | `Bearing` from true north, or None |
-
-A photo without the altitude, the gimbal yaw or the gimbal pitch has no attitude.
+XMP metadata of images, which vendors use for what Exif has no tag for. `ExifExtractor` keeps the packet as
+`ExifMetadata.xmp`, and `ExifMetadata.drone_attitude` reads from it how a DJI drone held its camera.
 
 ## Components
 

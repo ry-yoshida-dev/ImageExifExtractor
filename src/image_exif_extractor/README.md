@@ -13,26 +13,4 @@ Package for extracting the Exif tags of an image into immutable, typed entries, 
 | [exif/](./exif/README.md) | `ExifMetadata` returned by `ExifExtractor`, with its raw tags and interpreted fields |
 | [xmp/](./xmp/README.md) | `XmpPacket` of the XMP metadata, and the `DroneAttitude` of a drone's camera read from it |
 | [writing/](./writing/README.md) | `ExifWriter` and `ExifUpdate`, which set the location, direction and time of capture of JPEG files without re-encoding them |
-
-## Values
-
-Pillow's raw values are normalized into `ExifValue`
-(`str | int | float | bytes | tuple[ExifValue, ...]`):
-
-| Raw value | Normalized value |
-|-----------|------------------|
-| Rational | `float`, or NaN for a zero denominator |
-| ASCII text | `str` without NUL padding or surrounding whitespace |
-| Undefined / byte data | `bytes` |
-| Sequence | `tuple` of normalized items |
-
-Pointer tags (`ExifOffset`, `GPSInfo`, `ExifInteroperabilityOffset`) are
-skipped, since their directories are extracted as `ExifIFD` entries instead.
-`MakerNote` is skipped unless `is_maker_note_included=True`.
-
-## Error Handling
-
-Absent tags read as `None`, and so do numeric tags holding an undefined
-rational (a zero denominator). A tag present with the wrong type or a malformed
-value raises `TypeError` or `ValueError` when an interpreted field reads it,
-rather than being silently dropped.
+| [py.typed](./py.typed) | Marker declaring the package as typed for static analysers |

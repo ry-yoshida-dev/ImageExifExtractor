@@ -23,7 +23,7 @@ Pytest suite for `image_exif_extractor`. Fixtures in `conftest.py` write small i
 | [test_xmp.py](./test_xmp.py) | Property lookups of `XmpPacket` and the `DroneAttitude` read from DJI XMP |
 | [test_exif_writer.py](./test_exif_writer.py) | Lossless writing of location, direction and time of capture into JPEG files, and the TIFF and JPEG structures it edits |
 
-## Example
+## Examples
 
 ```bash
 uv run pytest

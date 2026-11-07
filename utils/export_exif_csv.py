@@ -31,6 +31,11 @@ class ExifCsvExporter:
     message for a file that could not be read. Such a file keeps its row with
     empty tag cells, so one broken image does not stop the export.
 
+    Text is written as-is, numbers as numbers, sequences as a JSON array, and
+    an absent tag as an empty cell. GPS columns hold signed decimal degrees
+    and meters. The file is UTF-8 with BOM so spreadsheet applications detect
+    the encoding.
+
     Attributes
     ----------
     tag_names : tuple[str, ...]

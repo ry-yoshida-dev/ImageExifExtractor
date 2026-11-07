@@ -22,6 +22,9 @@ class GpsCoordinateReader:
     Exif stores each angle as an unsigned degrees-minutes-seconds triple with
     a separate hemisphere reference, and the altitude as an unsigned height
     with a separate sea level reference. Both are combined into signed values.
+    Non-canonical components, such as fractional minutes with zero seconds,
+    are carried into canonical form, and a missing `GPSAltitudeRef` means
+    above sea level, as the Exif specification defines.
     """
 
     @classmethod
